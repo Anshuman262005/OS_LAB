@@ -18,7 +18,7 @@ int main() {
 
 
 
-    // Input burst times
+   
 
     for (i = 0; i < n; i++) {
 
@@ -30,29 +30,29 @@ int main() {
 
 
 
-    // FCFS Scheduling - Calculating Waiting Time and Turnaround Time
+ 
 
-    wt[0] = 0; // First process has zero waiting time
+    wt[0] = 0; 
 
-    tat[0] = bt[0]; // Turnaround time for first process
+    tat[0] = bt[0]; 
 
 
 
     for (i = 1; i < n; i++) {
 
-        wt[i] = wt[i - 1] + bt[i - 1]; // Waiting time formula
+        wt[i] = wt[i - 1] + bt[i - 1]; 
 
-        tat[i] = wt[i] + bt[i]; // Turnaround time formula
+        tat[i] = wt[i] + bt[i]; 
 
-        wavg += wt[i]; // Summing up waiting times
+        wavg += wt[i]; 
 
-        tatavg += tat[i]; // Summing up turnaround times
+        tatavg += tat[i]; 
 
     }
 
 
 
-    // Calculate Averages
+   
 
     wavg /= n;
 
@@ -60,7 +60,7 @@ int main() {
 
 
 
-    // Print Process Table
+    
 
     printf("\nPROCESS\tBURST TIME\tWAITING TIME\tTURNAROUND TIME\n");
 
