@@ -1,4 +1,26 @@
- for (i = 0; i < n; i++) {
+#include <stdio.h>
+
+
+
+int main() {
+
+    int n, i;
+
+    int bt[20], wt[20], tat[20]; 
+
+    float wavg = 0, tatavg = 0;
+
+
+
+    printf("Enter the number of processes: ");
+
+    scanf("%d", &n);
+
+
+
+    // Input burst times
+
+    for (i = 0; i < n; i++) {
 
         printf("Enter Burst Time for Process %d: ", i + 1);
 
@@ -8,29 +30,29 @@
 
 
 
- 
+    // FCFS Scheduling - Calculating Waiting Time and Turnaround Time
 
-    wt[0] = 0;
+    wt[0] = 0; // First process has zero waiting time
 
-    tat[0] = bt[0];
+    tat[0] = bt[0]; // Turnaround time for first process
 
 
 
     for (i = 1; i < n; i++) {
 
-        wt[i] = wt[i - 1] + bt[i - 1];
+        wt[i] = wt[i - 1] + bt[i - 1]; // Waiting time formula
 
-        tat[i] = wt[i] + bt[i];
+        tat[i] = wt[i] + bt[i]; // Turnaround time formula
 
-        wavg += wt[i];
+        wavg += wt[i]; // Summing up waiting times
 
-        tatavg += tat[i];
+        tatavg += tat[i]; // Summing up turnaround times
 
     }
 
 
 
-   
+    // Calculate Averages
 
     wavg /= n;
 
@@ -38,7 +60,7 @@
 
 
 
-   
+    // Print Process Table
 
     printf("\nPROCESS\tBURST TIME\tWAITING TIME\tTURNAROUND TIME\n");
 
