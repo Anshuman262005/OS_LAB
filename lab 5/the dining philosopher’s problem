@@ -1,0 +1,85 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+#include <semaphore.h>
+#include <unistd.h>
+
+#define MAX 10
+
+int hungryCount;
+int hungryPhilosophers[MAX];
+int eatingCount = 0;
+int eatingLimit = 1; // default to 1 (can be set to 2 by menu)
+sem_t mutex, forks[MAX];
+
+void* philosopher(void* arg) {
+    int id = *(int*)arg;
+
+    // Simulate waiting
+    printf("P %d is waiting\n", id);
+    sem_wait(&mutex);
+
+    while (eatingCount >= eatingLimit) {
+        sem_post(&mutex);
+        usleep(100000); // wait a bit before trying again
+        sem_wait(&mutex);
+    }
+
+    eatingCount++;
+    printf("P %d is granted to eat\n", id);
+    sem_post(&mutex);
+
+    sleep(1); // Simulate eating
+
+    sem_wait(&mutex);
+    printf("P %d has finished eating\n", id);
+    eatingCount--;
+    sem_post(&mutex);
+
+    return NULL;
+}
+
+int main() {
+    int totalPhilosophers;
+    int choice;
+    pthread_t threads[MAX];
+
+    sem_init(&mutex, 0, 1);
+
+    printf("Enter the total number of philosophers: ");
+    scanf("%d", &totalPhilosophers);
+
+    printf("How many are hungry: ");
+    scanf("%d", &hungryCount);
+
+    for (int i = 0; i < hungryCount; i++) {
+        printf("Enter philosopher %d position (1 to %d): ", i + 1, totalPhilosophers);
+        scanf("%d", &hungryPhilosophers[i]);
+    }
+
+    do {
+        printf("\n1. One can eat at a time\n");
+        printf("2. Two can eat at a time\n");
+        printf("3. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        if (choice == 1 || choice == 2) {
+            eatingLimit = choice;
+
+            for (int i = 0; i < hungryCount; i++) {
+                pthread_create(&threads[i], NULL, philosopher, &hungryPhilosophers[i]);
+                sleep(1); // slight delay to simulate staggered requests
+            }
+
+            for (int i = 0; i < hungryCount; i++) {
+                pthread_join(threads[i], NULL);
+            }
+        } else if (choice != 3) {
+            printf("Invalid choice. Try again.\n");
+        }
+
+    } while (choice != 3);
+
+    return 0;
+}
